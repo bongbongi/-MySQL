@@ -1,0 +1,46 @@
+-- 가격대 별 상품 개수 구하기   
+-- ★★★★★ 어려움
+
+-- 내가 쓴 답 
+-- IF문으로 해내고 싶어서 이렇게 했는데 ... IF문으로 더 깔끔하게 하는 방법이 있을까?
+SELECT 
+if(price<10000,0,
+   if(price<20000,10000,
+      if(price<30000,20000,
+         if(price<40000,30000,
+            if(price<50000,40000,
+               if(price<60000,50000,
+                  if(price<70000,60000,
+                     if(price<80000,70000,80000
+                      
+         )))))))) as 'PRICE_GROUP',
+      
+count(*) as 'PRODUCTS' from product
+group by PRICE_GROUP 
+order by PRICE_GROUP;
+
+
+
+-- 다른 분 정답1
+--TRUNCATE가 데이터 전체 삭제만 되는 줄 알았는데 저렇게 사용할 수도 있다니...
+--ALIAS 별칭을 GROUP BY나 ORDER BY에서 사용가능한지 몰랐다. 
+
+SELECT TRUNCATE(PRICE, -4) AS PRICE_GROUP, COUNT(*) AS PRODUCTS
+FROM PRODUCT
+GROUP BY TRUNCATE(PRICE, -4)
+ORDER BY PRICE_GROUP ;
+
+/*TRUNCATE 연습해보기
+EX.20221017.1132
+TRUNCATE(20221017.1132,2) -> 20221017.11 
+TRUNCATE(20221017.1132,0) -> 20221017 
+TRUNCATE(20221017.1132,-4) -> 20220000
+*/
+
+
+-- 다른 분 정답2
+
+SELECT floor(price / 10000) * 10000 as price_group, count(*)
+from product
+group by price_group
+order by price_group asc;
