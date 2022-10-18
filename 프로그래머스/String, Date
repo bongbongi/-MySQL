@@ -1,0 +1,35 @@
+-- 루시와 엘라 찾기
+-- in 사용법이 갑자기 기억나지 않아 애먹었다. in를 쓸때는 =는 사용하지 않는다!
+--내가 쓴 답
+SELECT ANIMAL_ID,	NAME,	SEX_UPON_INTAKE 
+from animal_ins
+where name in('Lucy' , 'Ella' , 'Pickle' , 'Rogan' , 'Sabrina' , 'Mitty')
+order by animal_id;
+
+-- 1 다른분 정답
+-- 특정 문자열 검색할 때 사용하는 방법이라고 정답님이 알려주셨다.
+-- 컬럼명 LIKE CONCAT('%', '검색할 문자열', '%')
+-- 주의! where 뒤에 이름들은 ' ' 하나로 묶어줘야함 
+-- 컬럼명 대신에 저렇게 나열할 수도 있다는 걸 알았다.
+SELECT ANIMAL_ID, NAME, SEX_UPON_INTAKE
+FROM ANIMAL_INS
+WHERE  'Lucy, Ella, Pickle, Rogan, Sabrina, Mitty' LIKE CONCAT('%', NAME, '%')
+ORDER BY ANIMAL_ID;
+
+
+-- 2 다른분 정답
+select a.animal_id, a.tmpName as "NAME", a.sex_upon_intake
+from (SELECT animal_id, 
+         case name 
+        when "Lucy" then name
+        when "Ella" then name
+        when "Pickle" then name
+        when "Rogan" then name
+        when "Sabrina" then name
+        when "Mitty" then name
+        end as "tmpName"
+        , sex_upon_intake
+from animal_ins
+) as a --a라고 별칭
+where a.tmpName is not null
+order by 1         -- select순서를 기준으로 1은 첫번째 칼럼을 의미함!! 즉 animal_id
